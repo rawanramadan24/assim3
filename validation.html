@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form Validation</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input { padding: 8px; width: 300px; border: 1px solid #ccc; border-radius: 4px; }
+        .error { color: red; font-size: 0.9em; display: none; margin-top: 5px; }
+        button { padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #218838; }
+    </style>
+</head>
+<body>
+
+    <h2>Registration Form</h2>
+    <form id="regForm">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name">
+            <div class="error" id="nameError">Name is required.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email">
+            <div class="error" id="emailError">Please enter a valid email address.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password">
+            <div class="error" id="passwordError">Password must be at least 8 characters.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword">
+            <div class="error" id="confirmPasswordError">Passwords do not match.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age">
+            <div class="error" id="ageError">Age must be a valid number greater than 0.</div>
+        </div>
+
+        <button type="submit">Register</button>
+    </form>
+
+    <script>
+        // Select the form and the error message elements
+        const form = document.getElementById('regForm');
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const ageInput = document.getElementById('age');
+
+        // Error display elements
+        const nameError = document.getElementById('nameError');
+        const emailError = document.getElementById('emailError');
+        const passwordError = document.getElementById('passwordError');
+        const confirmPasswordError = document.getElementById('confirmPasswordError');
+        const ageError = document.getElementById('ageError');
+
+        // Add event listener for form submission
+        form.addEventListener('submit', function(e) {
+            let isValid = true;
+
+            // 1. Validate Name
+            if (nameInput.value.trim() === "") {
+                nameError.style.display = 'block';
+                isValid = false;
+            } else {
+                nameError.style.display = 'none';
+            }
+
+            // 2. Validate Email (Simple check for @ and .)
+            const emailValue = emailInput.value.trim();
+            if (emailValue === "" || !emailValue.includes('@') || !emailValue.includes('.')) {
+                emailError.style.display = 'block';
+                isValid = false;
+            } else {
+                emailError.style.display = 'none';
+            }
+
+            // 3. Validate Password (At least 8 characters)
+            if (passwordInput.value.length < 8) {
+                passwordError.style.display = 'block';
+                isValid = false;
+            } else {
+                passwordError.style.display = 'none';
+            }
+
+            // 4. Validate Confirm Password (Must match)
+            if (confirmPasswordInput.value !== passwordInput.value || confirmPasswordInput.value === "") {
+                confirmPasswordError.style.display = 'block';
+                isValid = false;
+            } else {
+                confirmPasswordError.style.display = 'none';
+            }
+
+            // 5. Validate Age (Must be > 0)
+            if (ageInput.value === "" || parseInt(ageInput.value) <= 0) {
+                ageError.style.display = 'block';
+                isValid = false;
+            } else {
+                ageError.style.display = 'none';
+            }
+
+            // Stop form submission if validation fails
+            if (!isValid) {
+                e.preventDefault(); // Prevents the form from being sent
+            } else {
+                alert("Form submitted successfully!");
+                // Here you would normally allow the form to submit or send data via AJAX
+            }
+        });
+    </script>
+</body>
+</html>

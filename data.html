@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Table</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .controls { margin-bottom: 15px; }
+        input[type="text"] { padding: 8px; width: 200px; margin-right: 10px; }
+        button { padding: 8px 12px; margin-right: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <h2>Data Table</h2>
+
+    <div class="controls">
+        <input type="text" id="searchInput" placeholder="Search by name...">
+        <button onclick="sortByName()">Sort by Name</button>
+        <button onclick="sortByAge()">Sort by Age</button>
+    </div>
+
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>City</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be inserted here by JavaScript -->
+        </tbody>
+    </table>
+
+    <script>
+        // 1. Create an array of objects
+        let people = [
+            { name: "John", age: 28, city: "New York" },
+            { name: "Alice", age: 24, city: "London" },
+            { name: "Bob", age: 35, city: "Paris" },
+            { name: "David", age: 22, city: "Berlin" },
+            { name: "Eve", age: 30, city: "Tokyo" }
+        ];
+
+        const tableBody = document.querySelector('#dataTable tbody');
+        const searchInput = document.getElementById('searchInput');
+
+        // 2. Function to render the table based on the provided data array
+        function renderTable(data) {
+            // Clear existing rows
+            tableBody.innerHTML = ''; 
+
+            // Loop through the data and build rows
+            data.forEach(person => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${person.name}</td>
+                    <td>${person.age}</td>
+                    <td>${person.city}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Initial render
+        renderTable(people);
+
+        // 3. Search Box Filtering (Live search on keyup)
+        searchInput.addEventListener('keyup', function() {
+            const searchTerm = searchInput.value.toLowerCase();
+            
+            // Filter the array based on the search term (checking the name property)
+            const filteredData = people.filter(person => 
+                person.name.toLowerCase().includes(searchTerm)
+            );
+            
+            renderTable(filteredData);
+        });
+
+        // 4. Sort Functions
+        function sortByName() {
+            // Sort alphabetically by name
+            people.sort((a, b) => a.name.localeCompare(b.name));
+            renderTable(people); // Re-render the table
+        }
+
+        function sortByAge() {
+            // Sort numerically by age (ascending)
+            people.sort((a, b) => a.age - b.age);
+            renderTable(people); // Re-render the table
+        }
+    </script>
+</body>
+</html>
